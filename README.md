@@ -20,6 +20,7 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 5. Multiple role profiles
 6. Proxy
 7. Control VM's placement
+8. Credentials are stored in ansible-vault, which is encrypted
 
 ### Build of Materials(BOM) for this Demo
 -----------------------------------------
@@ -33,13 +34,16 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 ### Prerequisites for Deploying Contrail Cloud
 ----------------------------------------------
 * Bringup the infrastructure based on the above reference topology
-* Every system have access to Contrail Cloud repository satellite
 * Setup undercloud Host
+* Undercloud host have access to Contrail Cloud repository satellite
+
 
 ### Install Contrail Cloud
 --------------------------
 * Get licence keys for this installation
 * Download the Contrail Cloud installer script from [here](https://support.juniper.net/support/downloads/)
+* For the POC, the configuration files are created for single-subnet and interfaces are not bonded
+* Make changes to the 
 
 
 ## Reference
