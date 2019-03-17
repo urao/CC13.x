@@ -31,4 +31,4 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
   * 1 Kernel Compute
 
 ## Reference
-[CC13 Deployment](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)                                 
+[CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)                                 
