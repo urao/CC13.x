@@ -1,5 +1,8 @@
 # FAQ
-### Steps to recover a node from clean_failed state
+------
+
+1) Steps to recover a node from clean_failed state
+--------------------------------------------------
 ```
 openstack baremetal node list
 openstack baremetal node maintenance unset <node_uuid> 
