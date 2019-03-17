@@ -1,7 +1,18 @@
 # FAQ
 ------
 
-1) Steps to recover a node from clean_failed state
+1) How to see DCHP Requests and Response between nodes and undercloud VM
+--------------------------------------------------------------------------
+```
+tcpdump command to check on jumphost
+tcpdump -i br-provision -v -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
+```
+```
+tcpdump command to check on undercloud VM
+tcpdump br-ctlplane -vvv -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
+```
+
+2) Steps to recover a node from clean_failed state
 --------------------------------------------------
 ```
 openstack baremetal node list
