@@ -31,17 +31,17 @@ ipmi_hardware1: &hardware1
 #    <<: *hardware1
 inventory_nodes:
   - name: "control-host001"
-    pm_addr: "10.84.129.56"
+    pm_addr: "10.84.29.56"
     <<: *hardware1
   - name: "control-host002"
-    pm_addr: "10.84.129.57"
+    pm_addr: "10.84.29.57"
     <<: *hardware1
   - name: "control-host003"
-    pm_addr: "10.84.129.52"
+    pm_addr: "10.84.29.52"
     <<: *hardware1
   - name: "compute-dpdk-001"
-    pm_addr: "10.84.129.51"
+    pm_addr: "10.84.29.51"
     <<: *hardware1
   - name: "compute-kernel-001"
-    pm_addr: "10.84.129.50"
+    pm_addr: "10.84.29.50"
     <<: *hardware1

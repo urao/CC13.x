@@ -2,26 +2,24 @@
 global:
   # List of DNS nameservers 
   dns:
-    - "172.21.200.60"
-    - "10.84.5.100"
     - "8.8.8.8"
   # List of NTP time servers 
   ntp:
-    - "66.129.233.81"
+    - "66.129.23.81"
   # Timezone for all servers
   timezone: 'America/Los_Angeles'
   rhel:
     # Contrail Cloud Activation Key
     satellite:
       #SATELLITE_KEY should be defined in vault-data.yml file
-      key: "ak_lab_talharbash"
+      #key: "XXXXXXXX"
       #SATELLITE_ORG
       organization: "ContrailCloudNFR"
       #SATELLITE_FQDN
       fqdn: contrail-cloud-satellite.juniper.net
   # DNS domain information. 
   # Must be unique for every deployment to avoid name conflicts
-  domain: "urao.englab.juniper.net"
+  domain: "urao.lab.net"
 
 jumphost:
   network:
