@@ -1,7 +1,7 @@
 # FAQ
 ------
 
-1) How to see DCHP Requests and Response between nodes and undercloud VM
+1. How to see DCHP Requests and Response between nodes and undercloud VM
 --------------------------------------------------------------------------
 ```
 tcpdump command to check on jumphost
@@ -12,7 +12,7 @@ tcpdump command to check on undercloud VM
 tcpdump -i br-ctlplane -vvv -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
 ```
 
-2) Steps to recover a node from clean_failed state
+2. Steps to recover a node from clean_failed state
 --------------------------------------------------
 ```
 openstack baremetal node list
@@ -24,5 +24,14 @@ ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> provide
 openstack baremetal node list
 ```
 
+3. Steps to upgrade CC to minor releases
+----------------------------------------
+3.1. Run below steps on jumphost
+```
+yum update -y
+/var/lib/contrail_cloud/contrail_cloud_installer.sh
+/var/lib/contrail_cloud/scripts/install_contrail_cloud_manager.sh
+```
+
 ## Reference
-[CC13 Deployment](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
+[CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
