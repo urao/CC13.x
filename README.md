@@ -9,3 +9,27 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 ### CC Compute and Storage Topology 
 -----------------------------
 ![Compute and Storage Topology](images/cc_compute_storage.png)
+
+
+### CC Features tested 
+-----------------------
+1. IPv6 addressing support on External, Storage and Storage Mgmt networks
+2. LDAP backend integration with keystone
+3. Disk labeling
+4. Multi-tenant subnet
+5. Multiple role profiles
+6. Proxy
+7. Control VM's placement
+
+### Build of Materials(BOM) for this Demo
+-----------------------------------------
+* 1 QFX5100
+* 6 Servers
+ * 1 Jumphost
+ * 3 Control Host
+ * 1 DPDK Compute
+ * 1 Kernel Compute
+
+## Reference
+[CC13 Deployment](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
+~                                  
