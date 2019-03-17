@@ -6,7 +6,8 @@
 /var/log/contrail_cloud/*         << Log location on undercloud VM
 /var/log/contrail_cloud/*         << Ansible logs on Jumphost 
 sudo vbmc list                    << Run on controller hosts to check port#
-yum list installed | grep cloud   << Version of CC installed
+yum list installed | grep cloud   << Version of CC installed on jumphost
+rpm -qa | grep contrail           << Version of CN installed on undercloud
 /var/log/mistral/*.log            << Mistral logs on undercloud
 tailf /var/log/contrail_cloud/create-stack.log  << Check progress of the stack creation on undercloud VM
 ```
