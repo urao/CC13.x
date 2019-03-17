@@ -1,4 +1,5 @@
 #!/bin/env bash
+# This script install os-net-config and ovs packages
 # Tested on CentOS7 and RedHat7
 
 help()
