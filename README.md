@@ -38,7 +38,8 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 
 ### Install Contrail Cloud
 --------------------------
-* Bringup the infrastructure based on the above reference topology
+* Get licence keys for this installation
+* Download the Contrail Cloud installer script from [here](https://support.juniper.net/support/downloads/)
 
 
 ## Reference
