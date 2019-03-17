@@ -24,9 +24,8 @@ ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> provide
 openstack baremetal node list
 ```
 
-3. Steps to upgrade CC to minor releases
-----------------------------------------
-3.1. Run below steps on jumphost
+3. Steps to upgrade CC to minor releases, run following on jumphost
+---------------------------------------------------------------------
 ```
 yum update -y
 /var/lib/contrail_cloud/contrail_cloud_installer.sh
