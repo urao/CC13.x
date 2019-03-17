@@ -16,7 +16,7 @@
 
 # List of nodes to use as compute role using Contrail DPDK vRouter
 compute_nodes_dpdk:
-  - name: compute001
+  - name: compute-dpdk-001
   #- name: computedpdk1
     #leaf: '0'
     #profile: hw2
@@ -35,5 +35,5 @@ compute_nodes_sriov:
 
 # List of nodes to use as compute role using Contrail kernel vRouter
 compute_nodes_kernel:
-  #- name: compute-kernel-001
+  - name: compute-kernel-001
   #- name: compute001

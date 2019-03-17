@@ -33,15 +33,15 @@ inventory_nodes:
   - name: "control-host001"
     pm_addr: "10.84.129.56"
     <<: *hardware1
-  - name: "compute001"
+  - name: "control-host002"
     pm_addr: "10.84.129.57"
     <<: *hardware1
-  - name: "ceph-host001"
+  - name: "control-host003"
     pm_addr: "10.84.129.52"
     <<: *hardware1
-  - name: "ceph-host002"
+  - name: "compute-dpdk-001"
     pm_addr: "10.84.129.51"
     <<: *hardware1
-  - name: "ceph-host003"
+  - name: "compute-kernel-001"
     pm_addr: "10.84.129.50"
     <<: *hardware1

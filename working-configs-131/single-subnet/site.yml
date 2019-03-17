@@ -156,6 +156,7 @@ overcloud:
     aaa_mode: "rbac"
     vrouter:
       #VrouterGateway
+      gateway: 172.16.82.254
       dpdk:
         #ContrailDpdkDriver
         driver: uio_pci_generic
@@ -273,6 +274,15 @@ overcloud:
       # VLAN tag for the tenant network
       # Corresponds to the TenantNetworkVlanID heat property
       vlan: 202
+      #TenantNetCidr
+      cidr: "172.16.82.0/24"
+      #TenantNetworkMtu
+      mtu: 1500
+      pool:
+        #TenantAllocationPoolsStart
+        start: 172.16.82.100
+        #TenantAllocationPoolsEnd
+        end: 172.16.82.200
     # The storage network is used for compute storage access
     #storage:
       #vlan: 203
@@ -302,7 +312,7 @@ ceph:
   # Choice to enable Ceph storage in the overcloud.  
   # "true" means that Ceph will be deployed as the backed for Cinder and Glance services.  
   # "false" false means that Ceph will not be deployed.
-  enabled: true
+  enabled: false
   # Ceph OSD disk configuration
   osd:
     # Update the Ceph crush map when OSDs are started
