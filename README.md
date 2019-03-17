@@ -30,5 +30,16 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
   * 1 DPDK Compute
   * 1 Kernel Compute
 
+### Prerequisites for Deploying Contrail Cloud
+----------------------------------------------
+* Bringup the infrastructure based on the above reference topology
+* Every system have access to Contrail Cloud repository satellite
+* Setup undercloud Host
+
+### Install Contrail Cloud
+--------------------------
+* Bringup the infrastructure based on the above reference topology
+
+
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)                                 
