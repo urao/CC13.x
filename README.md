@@ -5,3 +5,7 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 ### CC Controllers Topology 
 -----------------------------
 ![Controller Topology](images/cc_controllers.png)
+
+### CC Compute and Storage Topology 
+-----------------------------
+![Compute and Storage Topology](images/cc_compute_storage.png)
