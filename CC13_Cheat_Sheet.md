@@ -27,10 +27,15 @@ openstack baremetal node list
 openstack server list
 openstack network list
 openstack subnet show ctlplane-subnet
+openstack stack list
+openstack catalog list
 ```
 
 4. Openstack commands on overcloud
 ```
+openstack overcloud profiles list
+openstack overcloud plan list
+openstack stack failures list --long overcloud
 openstack server list
 openstack network list
 openstack flavor list
