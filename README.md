@@ -43,7 +43,13 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 * Get licence keys for this installation
 * Download the Contrail Cloud installer script from [here](https://support.juniper.net/support/downloads/)
 * For the POC, the configuration files are created for single-subnet and interfaces are not bonded
-* Make changes to the 
+* Make changes to the configuration [files](working-configs-131/single-subnet)
+
+### Deployment steps
+--------------------
+
+
+
 
 
 ## Reference
