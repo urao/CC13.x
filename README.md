@@ -34,7 +34,7 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 ### Prerequisites for Deploying Contrail Cloud
 ----------------------------------------------
 * Bringup the infrastructure based on the above reference topology
-* Setup undercloud Host
+* Setup undercloud Host with RedHat 7.6 minimal-OS, configured with DNS, NTP
 * Undercloud host have access to Contrail Cloud repository satellite
 * Install CentOS on 2 of the servers and validate the fabric connectivity using os-net-config [scripts](validate_fabric)
 
@@ -43,6 +43,7 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 --------------------------
 * Get licence keys for this installation
 * Download the Contrail Cloud installer script from [here](https://support.juniper.net/support/downloads/)
+* Run the downloaded script, ./contrail_cloud_installer.sh
 * For the POC, the configuration files are created for single-subnet and interfaces are not bonded
 * Make changes to the configuration [files](working-configs-131/single-subnet)
 
