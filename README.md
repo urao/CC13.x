@@ -48,9 +48,13 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 
 ### Deployment steps
 --------------------
-
-
-
+*  /var/lib/contrail_cloud/scripts/install_contrail_cloud_manager.sh
+*  /var/lib/contrail_cloud/scripts/inventory-assign.sh
+*  /var/lib/contrail_cloud/scripts/control-hosts-deploy.sh
+*  /var/lib/contrail_cloud/scripts/control-vms-deploy.sh
+*  /var/lib/contrail_cloud/scripts/compute-nodes-assign.sh
+*  /var/lib/contrail_cloud/scripts/storage-nodes-assign.sh    << If CEPH is enabled
+*  /var/lib/contrail_cloud/scripts/openstack-deploy.sh
 
 
 ## Reference
