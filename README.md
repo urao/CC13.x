@@ -36,6 +36,7 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 * Bringup the infrastructure based on the above reference topology
 * Setup undercloud Host
 * Undercloud host have access to Contrail Cloud repository satellite
+* Install CentOS on 2 of the servers and validate the fabric connectivity using os-net-config [scripts](validate_fabric)
 
 
 ### Install Contrail Cloud
