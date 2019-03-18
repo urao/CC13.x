@@ -23,8 +23,14 @@ ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> available
 ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> provide
 openstack baremetal node list
 ```
+3. How to run deployment script in debug mode
+---------------------------------------------
+Run the script with '-d' option, Example
+```
+/var/lib/contrail_cloud/scripts/control-hosts-deploy.sh -d
+```
 
-3. Steps to upgrade CC to minor releases, run following on jumphost
+4. Steps to upgrade CC to minor releases, run following on jumphost
 ---------------------------------------------------------------------
 ```
 yum update -y
