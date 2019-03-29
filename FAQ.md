@@ -25,7 +25,6 @@ openstack baremetal node list
 ```
 3. How to run deployment script in debug mode
 ---------------------------------------------
-Run the script with '-d' option, Example
 ```
 /var/lib/contrail_cloud/scripts/control-hosts-deploy.sh -d
 ```
