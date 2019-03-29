@@ -3,12 +3,12 @@
 
 1. How to see DCHP Requests and Response between nodes and undercloud VM
 --------------------------------------------------------------------------
+  - Command to check on jumphost
 ```
-tcpdump command to check on jumphost
 tcpdump -i br-provision -v -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
 ```
+  - Command to check on undercloud VM
 ```
-tcpdump command to check on undercloud VM
 tcpdump -i br-ctlplane -vvv -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
 ```
 
