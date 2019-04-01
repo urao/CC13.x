@@ -46,8 +46,8 @@
 
 4. Prechecks before deployment 
 ```
-1. Install CentOS on 2 of the servers and validate the fabric 
-   connectivity using os-net-config (scripts)[https://github.com/urao/CC13.x/tree/master/validate_fabric]
+1. Install CentOS/Ubuntu on few of the nodes and validate the fabric connectivity 
+   using os-net-config [scripts](https://github.com/urao/CC13.x/tree/master/validate_fabric)
 2. Check the connectivity via ping with MTU size you plan to configure on the interfaces
 ```
 
@@ -69,7 +69,7 @@
   - Deployment steps 
 ```
 1. Download the Contrail Cloud Installer script from 
-   Contrail Cloud – (Download Software page)[https://www.juniper.net/support/downloads/?p=contrailcloud#sw] 
+   Contrail Cloud – [Download Software page](https://www.juniper.net/support/downloads/?p=contrailcloud#sw) 
    and copy the script on to the Undercloud host.
 2. Set ENV variables and RUN
 ```
