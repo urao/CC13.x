@@ -3,12 +3,12 @@
 
 1. How to see DCHP Requests and Response between nodes and undercloud VM
 --------------------------------------------------------------------------
+  - Command to check on jumphost
 ```
-tcpdump command to check on jumphost
 tcpdump -i br-provision -v -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
 ```
+  - Command to check on undercloud VM
 ```
-tcpdump command to check on undercloud VM
 tcpdump -i br-ctlplane -vvv -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
 ```
 
@@ -17,14 +17,17 @@ tcpdump -i br-ctlplane -vvv -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))
 ```
 openstack baremetal node list
 openstack baremetal node maintenance unset <node_uuid> 
-ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> abort
 ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> manage
-ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> available
 ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> provide
 openstack baremetal node list
 ```
+3. How to run deployment script in debug mode
+---------------------------------------------
+```
+/var/lib/contrail_cloud/scripts/control-hosts-deploy.sh -d
+```
 
-3. Steps to add contrail controller if not deployed 
+4. Steps to add contrail controller if not deployed 
 ---------------------------------------------------------------------
 ```
 Login to undercloud
