@@ -9,10 +9,12 @@ sudo vbmc list                    << Run on controller hosts to check port#
 yum list installed | grep cloud   << Version of CC installed on jumphost
 rpm -qa | grep contrail           << Version of CN installed on undercloud
 /var/log/mistral/*.log            << Mistral logs on undercloud
+/var/log/ironic/*                 << Ironic logs on undercloud
+/var/log/messages                 << Logs on undercloud
 tailf /var/log/contrail_cloud/create-stack.log  << Check progress of the stack creation on undercloud VM
 ```
 
-2. Introspection data for all the nodes is saved, check in
+2. Introspection data for all the nodes is saved, check:
 ```
 ls -l /var/lib/contrail_cloud/introspection/*.introspection
 yum install jq -y
@@ -48,3 +50,5 @@ openstack flavor list
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
+
+[PG CALCULATION](https://ceph.com/pgcalc/)

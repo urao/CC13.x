@@ -24,7 +24,28 @@ ironic --ironic-api-version 1.16 node-set-provision-state <node_uuid> provide
 openstack baremetal node list
 ```
 
-3. Steps to upgrade CC to minor releases, run following on jumphost
+3. Steps to add contrail controller if not deployed 
+---------------------------------------------------------------------
+```
+Login to undercloud
+openstack baremetal node delete <cc_node_id>
+Login to control host using 'contrail' user on which cc did not get deployed
+sudo -i
+virsh undefine contrail-controller 
+vbmc delete contrail-controller
+vbmc start contrail-controller
+Remove CC information from the facts,
+/var/lib/contrail_cloud/facts.d/<control_host_ip>.fact
+/var/lib/contrail_cloud/facts.d/control_vms.yml
+```
+Re-run the deployment scripts from the jumphost
+```
+/var/lib/contrail_cloud/scripts/control-hosts-deploy.sh 
+/var/lib/contrail_cloud/scripts/control-vms-deploy.sh 
+/var/lib/contrail_cloud/scripts/openstack-deploy.sh 
+```
+
+4. Steps to upgrade CC to minor releases, run following on jumphost
 ---------------------------------------------------------------------
 ```
 yum update -y
@@ -32,5 +53,10 @@ yum update -y
 /var/lib/contrail_cloud/scripts/install_contrail_cloud_manager.sh
 ```
 
+
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
+
+[vBMC](https://docs.openstack.org/tripleo-docs/latest/install/environments/virtualbmc.html)
+
+[ironic state diagram](https://docs.openstack.org/ironic/pike/_images/states.svg)

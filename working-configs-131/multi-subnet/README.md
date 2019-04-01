@@ -1,3 +1,3 @@
 ## Configuration
 
-Topology includes multi-tenant subnet network 
+Coming soon....

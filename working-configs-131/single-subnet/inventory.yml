@@ -39,9 +39,9 @@ inventory_nodes:
   - name: "control-host003"
     pm_addr: "10.84.29.52"
     <<: *hardware1
-  - name: "compute-dpdk-001"
+  - name: "computedpdk1"
     pm_addr: "10.84.29.51"
     <<: *hardware1
-  - name: "compute-kernel-001"
+  - name: "compute1"
     pm_addr: "10.84.29.50"
     <<: *hardware1

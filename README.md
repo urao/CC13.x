@@ -18,7 +18,7 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 3. Disk labeling
 4. Multi-tenant subnet
 5. Multiple role profiles
-6. Proxy
+6. Internet Proxy
 7. Control VM's placement
 
 ### Build of Materials(BOM) for this Demo

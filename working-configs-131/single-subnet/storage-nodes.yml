@@ -16,5 +16,8 @@
 
 storage_nodes:
   - name: ceph-host001
+    #profile: hw1
   - name: ceph-host002
+    #profile: hw2
   - name: ceph-host003
+    #profile: hw3

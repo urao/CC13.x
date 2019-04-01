@@ -1,4 +1,3 @@
-#urao
 global:
   # List of DNS nameservers 
   dns:
@@ -27,13 +26,16 @@ jumphost:
       # jumphost nic to be used for provisioning (PXE booting) servers
       nic: enp3s0f1
 
-#urao
+#undercloud:
+  #vm:
+    ##undercloud_vm_cpu_count
+    #cpu: 16
+    ##undercloud_vm_memory_size
+    #memory: 32
+    ##undercloud_vm_disk
+    #disk: 150
+
 control_hosts:
-  #control_host_user
-  user: cloud-user
-  neutron:
-    #neutron_provision_network
-    provision_network: "ctlplane"
   storage:
     spinning_storage:
       type: logical
@@ -125,7 +127,7 @@ compute_hosts:
     #enable sriov with dpdk
     # Contrail vrouter mode:
     #   supported values are: dpdk or anything else means kernel vRouter
-    mode: dpdk1
+    mode: dpdk
     #Sriov NumVFs separated by comma
     num_vf:
       - "enp129s0f1:8"
@@ -134,9 +136,43 @@ compute_hosts:
       - devname: "enp129s0f1"
         physical_network: "sriovnet1"
 
+  root_disk:
+  # you can define root disk for the profile,
+  # if you don't do it will be used default
+    compute: |
+      name: "/dev/sda"
+    compute-dpdk: |
+      name: "/dev/sda"
+  resource:
+    minimal_disk:
+    # you can define local_g sizeb for the profile,
+    # if you don't do it will be used default
+      compute: 50
+      compute-dpdk: 50
+
+undercloud:
+  nova:
+    # Nova flavor definitions for roles
+    flavor:
+      compute:
+        cpu: 8
+        memory: 24
+        disk: 40
+        ephemeral: 0
+      compute-dpdk:
+        cpu: 8
+        memory: 24
+        disk: 40
+        ephemeral: 0
+      ceph-storage:
+        cpu: 1
+        memory: 4
+        disk: 40
+        ephemeral: 0
+
 overcloud:
   extra_config:
-    CephIPv6: True
+    #CephIPv6: True
     ContrailDpdkOptions: "--vr_flow_entries=2000000 --vr_mempool_sz 131072 --dpdk_txd_sz 2048 --dpdk_rxd_sz 2048"
     NovaSchedulerDefaultFilters:
       - RetryFilter
@@ -227,53 +263,136 @@ overcloud:
   network:
     # The external network is used for referencing the overcloud APIs from outside the infrastructure.
     external:
+      heat_name: External
       vlan: 200
       mtu: 1500
       ipv6_enable: true
       supernet: "fd00:fd00:fd00:3000::/60"
       cidr: "fd00:fd00:fd00:3001::/64"
       default_route: fd00:fd00:fd00:3001::1
+      vip_enable: true
       vip: "fd00:fd00:fd00:3001::15"
       pool:
         start: fd00:fd00:fd00:3001::10
         end: fd00:fd00:fd00:3001:ffff:ffff:ffff:fffe
-    storage:
-      vlan: 203
-      mtu: 1500
-      ipv6_enable: true
-      cidr: "2aaa::/64"
-      pool:
-        start: 2aaa::1
-        end: 2aaa:0000:0000:0000:ffff:ffff:ffff:fffe
-    storage_mgmt:
-      vlan: 204
-      mtu: 1500
-      ipv6_enable: true
-      cidr: "3aaa::/64"
-      pool:
-        start: 3aaa::1
-        end: 3aaa:0000:0000:0000:ffff:ffff:ffff:fffe
-    #external:
+      #supernet: "10.187.0.0/16"
       #cidr: "10.187.5.0/24"
       #default_route: "10.187.5.1"
-      #vlan: 200
+      #vip_enable: true
       #vip: "10.187.5.70"
       #pool:
         #start: "10.187.5.51"
-        #end: "10.187.5.70"
-      #mtu: 1500
-    # The internal API network is used for control plane signalling and service API calls
+        #end: "10.187.5.69"
+      # List of roles that can be on this network
+      role:
+        - Controller
+        #- CephStorage
+
     internal_api:
-      # VLAN tag for the internal API network
-      # Corresponds to the InternalApiNetworkVlanID heat property
+      # Network name used by TripleO Heat Templates
+      heat_name: InternalApi
       vlan: 201
-    # The tenant network is used for tenant workload data
+      # Supernet accommodate all related leaf networks, e.g. internal_api0 and internal_api1
+      # Supernet is used to create static routes between leafs
+      # Supernet is defined only for main network, not per leafs
+      supernet: "172.16.0.0/16"
+      # CIDR (IP/prefix) for the internal api network subnet
+      # Corresponds to the InternalApiIpSubnet heat property
+      cidr: "172.16.0.0/24"
+      # Default route for the internal api network
+      # Corresponds to the InternalApiInterfaceDefaultRoute heat property
+      #default_route: 172.16.0.1
+      # MTU for internal api network
+      # Corresponds to the InternalApiNetworkMtu heat property
+      mtu: 1500
+      # DHCP pool for the internal api network
+      # Be sure that the range is large enough to accomodate all nodes in the internal api network
+      pool:
+        # Range start for the DHCP pool
+        start: 172.16.0.100
+        # Range end for the DHCP pool
+        end: 172.16.0.160
+      # Enable creation of a virtual IP on this network
+      # Management and Tenant networks don't use VIPs
+      vip_enable: true
+      # Floating virtual IP for the Openstack APIs on the internal api network
+      # Corresponds to the InternalApiVirtualFixedIPs heat property
+      vip: 172.16.0.90
+      # List of roles that can be on this network
+      role:
+        - Controller
+        - ContrailController
+        - ContrailAnalytics
+        - ContrailAnalyticsDatabase
+        - ContrailDpdk
+        - Compute
+        #- CephStorage
+
+    management:
+      # Network name used by TripleO Heat Templates
+      heat_name: Management
+      # VLAN tag for the management network
+      # Corresponds to the ManagementNetworkVlanID heat property
+      vlan: 205
+      # CIDR (IP/prefix) for the network subnet
+      # Corresponds to the ManagementIpSubnet heat property
+      cidr: "192.168.1.0/24"
+      # MTU for the network
+      # Corresponds to the ManagementNetworkMtu heat property
+      mtu: 1500
+      vip_enable: false
+      # DHCP pool for the  network
+      # Be sure that the range is large enough to accomodate all nodes in the network
+      pool:
+        # Range start for the DHCP pool
+        start: 192.168.1.100
+        # Range end for the DHCP pool
+        end: 192.168.1.200
+
+    storage:
+      heat_name: Storage
+      vlan: 203
+      mtu: 1500
+      vip_enable: true
+      #ipv6_enable: true
+      #supernet: "2aaa::/60"
+      #cidr: "2aaa::/64"
+      #default_route: fd00:fd00:fd00:3001::1
+      #pool:
+        #start: 2aaa::1
+        #end: 2aaa:0000:0000:0000:ffff:ffff:ffff:fffe
+      role:
+        - Controller
+        - ContrailDpdk
+        - Compute
+        #- CephStorage
+
+    storage_mgmt:
+      heat_name: StorageMgmt
+      vlan: 204
+      mtu: 1500
+      #ipv6_enable: true
+      #supernet: "3aaa::/60"
+      #cidr: "3aaa::/64"
+      #default_route: fd00:fd00:fd00:3001::1
+      #vip_enable: true
+      #pool:
+        #start: 3aaa::1
+        #end: 3aaa:0000:0000:0000:ffff:ffff:ffff:fffe
+      role:
+        - Controller
+        #- CephStorage
+
     tenant:
+      heat_name: Tenant
       # VLAN tag for the tenant network
       # Corresponds to the TenantNetworkVlanID heat property
       vlan: 202
       #TenantNetCidr
+      supernet: "172.16.0.0/16"
       cidr: "172.16.82.0/24"
+      default_route: 172.16.82.254
+      vrouter_gateway: 172.16.82.254
       #TenantNetworkMtu
       mtu: 1500
       pool:
@@ -281,17 +400,14 @@ overcloud:
         start: 172.16.82.100
         #TenantAllocationPoolsEnd
         end: 172.16.82.200
-    # The storage network is used for compute storage access
-    #storage:
-      #vlan: 203
-    # The storage management network is used for storage operations such as replication
-    #storage_mgmt:
-      #vlan: 204
-    # The management network is used for misc access such as SSH, and monitoring
-    management:
-      # VLAN tag for the management network
-      # Corresponds to the ManagementNetworkVlanID heat property
-      vlan: 205
+      # List of roles that can be on this network
+      role:
+        - ContrailController
+        - ContrailAnalytics
+        - ContrailAnalyticsDatabase
+        - ContrailDpdk
+        - Compute
+
   # Information used to generate the SSL certificates for the Openstack service APIs
   tls:
     #countryName_default

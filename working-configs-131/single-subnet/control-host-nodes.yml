@@ -18,45 +18,64 @@
 control_host_nodes:
   - name: "control-host001"
     control_ip_netmask: "192.168.213.5/24"
-    #external_ip_netmask: "10.10.10.4/16"
+    dns_server1: "72.29.43.60"
+    dns_server2: "72.29.39.60"
+    max_mtu: 1500
   - name: "control-host002"
     control_ip_netmask: "192.168.213.6/24"
-    #external_ip_netmask: "10.10.10.5/16"
+    dns_server1: "72.29.43.60"
+    dns_server2: "72.29.39.60"
+    max_mtu: 1500
   - name: "control-host003"
     control_ip_netmask: "192.168.213.7/24"
-    #external_ip_netmask: "10.10.10.6/16"
+    dns_server1: "72.29.43.60"
+    dns_server2: "72.29.39.60"
+    max_mtu: 1500
 
 # Template for network layout on all control host nodes
 # This follows the os-net-config syntax
 # See https://github.com/openstack/os-net-config/tree/stable/queens
+# variables from control_host_nodes can be refered with "{{ host.<variable> }}" in appformix_nodes_network_config
 control_host_nodes_network_config:
   - type: ovs_bridge
     name: br-eno1
-    use_dhcp: true
-    mtu: 9000
-    members:
+    use_dhcp: false
+    mtu: 1500
+    addresses:
+    -
+      ip_netmask: "{{ host.control_ip_netmask }}"
+    routes:
       -
-        type: interface
+        next_hop: "{{ overcloud['network']['control']['default_route'] }}"
+        default: true
+    dns_servers:
+      - "{{ host.dns_server1 }}"
+      - "{{ host.dns_server2 }}"
+    members:
+      - type: interface
         name: enp3s0f1
+        use_dhcp: false
+        mtu: 1500
   - type: ovs_bridge
     name: br-eno2
     use_dhcp: false
-    mtu: 9000
+    mtu: 1500
     members:
       -
         type: interface
-        name: enp129s0f0 
-        mtu: 9000
-
+        name: enp129s0f0
+        use_dhcp: false
+        mtu: 1500
   - type: ovs_bridge
     name: br-eno3
     use_dhcp: false
-    mtu: 9000
+    mtu: 1500
     members:
       -
         type: interface
-        name: enp129s0f1 
-        mtu: 9000
+        name: enp129s0f1
+        use_dhcp: false
+        mtu: 1500
 
 control_hosts:
   # The mapping from control host interfaces to the control VM interfaces

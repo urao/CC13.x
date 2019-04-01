@@ -8,6 +8,7 @@ ceph health
 ceph status || ceph -w
 ceph quorum_status --format json-pretty
 ceph -s
+ceph health detail
 ```
 2. Check cluster usage stats
 ```
@@ -23,6 +24,9 @@ ceph pg stat
 ceph osd tree
 ceph osd stat
 ceph osd dump
+ceph osd crush
+ceph osd crush rule ls
+ceph osd crush rule dump
 ```
 5. List cluster keys
 ```
