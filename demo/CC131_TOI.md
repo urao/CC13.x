@@ -66,17 +66,17 @@
 ![Controller VM's](images/topo3.png)
 
   - Deployment steps 
+1. Download the Contrail Cloud Installer script from [Contrail Cloud – Download Software page](https://www.juniper.net/support/downloads/?p=contrailcloud#sw)
 ```
-1. Download the Contrail Cloud Installer script from 
-   Contrail Cloud – [Download Software page](https://www.juniper.net/support/downloads/?p=contrailcloud#sw) 
-   and copy the script on to the Undercloud host.
-2. Set ENV variables and RUN
-```
-./contrail_cloud_installer.sh  --satellite_host ${SATELLITE} --satellite_key ${SATELLITE_KEY} --satellite_org ${SATELLITE_ORG}
-```
+2. Copy the above downloaded script on to the Undercloud host.
+3. Set ENV variables and RUN
+./contrail_cloud_installer.sh  --satellite_host ${SATELLITE} \
+       --satellite_key ${SATELLITE_KEY} --satellite_org ${SATELLITE_ORG}
 3. cp /var/lib/contrail_cloud/samples/*.yml /var/lib/contrail_cloud/config 
-4. Check the sample working config (files)[]
-5. Save password sensitive data in vault-data.yml
+```
+4. Check the sample working [config files](https://github.com/urao/CC13.x/tree/master/demo/single-subnet-cfg)
+```
+5. Configure passwords in vault-data.yml
 6. sudo /var/lib/contrail_cloud/scripts/install_contrail_cloud_manager.sh
 7. /var/lib/contrail_cloud/scripts/inventory-assign.sh  
 8. /var/lib/contrail_cloud/scripts/control-hosts-deploy.sh
@@ -90,15 +90,8 @@
 ```
 /var/lib/contrail_cloud/scripts/overcloud-validation.sh
 ```
-  - Add new compute nodes 
-```
-Update inventory.yml && run /var/lib/contrail_cloud/scripts/inventory-assign.sh
-Update compute-nodes.yml with new nodes && run /var/lib/contrail_cloud/scripts/compute-nodes-assign.sh
-Run /var/lib/contrail_cloud/scripts/openstack-deploy.sh
-```
 
 3. Check [FAQ Link](https://github.com/urao/CC13.x/blob/master/FAQ.md)
-
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
