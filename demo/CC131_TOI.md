@@ -2,7 +2,9 @@
 
 1. Introduction
 ```
-Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to run high-performance NFV with always-on reliability, allowing service providers to deliver innovative services with greater agility. Contrail Cloud Release 13.1 features Red Hat OpenStack combined with Juniper Contrail Networking, thereby bridging dynamic cloud orchestration with highly scalable connectivity. Furthermore, Contrail Cloud leverages AppFormix which has a built-in automation capability powered by machine learning to run the cloud infrastructure and VNFs in the most optimal manner, and remediating any potential failures to ensure adherence to SLAs.
+* Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to run high-performance NFV with always-on reliability, allowing service providers to deliver innovative services with greater agility. 
+* Contrail Cloud Release 13.1 features Red Hat OpenStack combined with Juniper Contrail Networking, thereby bridging dynamic cloud orchestration with highly scalable connectivity. 
+* Contrail Cloud leverages AppFormix which has a built-in automation capability powered by machine learning to run the cloud infrastructure and VNFs in the most optimal manner, and remediating any potential failures to ensure adherence to SLAs.
 ```
 
 2. Supported Features 
@@ -14,6 +16,7 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 5. Multiple role profiles 
 6. Internet Proxy
 7. Control VM's placement
+8. Credentials are stored in ansible-vault, which is encrypted
 ```
 
 3. Deployment prerequisties
@@ -50,13 +53,14 @@ Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to r
 ```
   - Topology
 ```
-![Topology](images/demo_topology.png)
-![Controller VM](images/demo_cc_vms.png)
+![Topology(Physical Node)](images/topo1.png)
+![Topology(Logical)](images/topo2.png)
+![Controller VM](images/topo3.png)
 ```
   - Deployment steps 
 ```
 1. Download the Contrail Cloud Installer script from Contrail Cloud – (Download Software page)[https://www.juniper.net/support/downloads/?p=contrailcloud#sw] and copy the script on to the Undercloud host.
-2. Run
+2. Set ENV variables and RUN
 ```
 ./contrail_cloud_installer.sh  --satellite_host ${SATELLITE} --satellite_key ${SATELLITE_KEY} --satellite_org ${SATELLITE_ORG}
 ```
