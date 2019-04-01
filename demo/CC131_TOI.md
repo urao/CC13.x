@@ -22,6 +22,7 @@
 6. Internet Proxy
 7. Control VM's placement
 8. Credentials are stored in ansible-vault, which is encrypted
+9. External CEPH (Make sure version of CEPH is compatible with OSP13)
 ```
 
 3. Deployment prerequisties
