@@ -44,12 +44,10 @@
 5. Has time synchronized with an NTP source
 ```
 
-4. Prechecks before deployment 
-```
-1. Install CentOS/Ubuntu on few of the nodes and validate the fabric connectivity 
+4. Pre-checks before deployment 
+   - Install CentOS/Ubuntu on few of the nodes and validate the fabric connectivity 
    using os-net-config [scripts](https://github.com/urao/CC13.x/tree/master/validate_fabric)
-2. Check the connectivity via ping with MTU size you plan to configure on the interfaces
-```
+   - Check the connectivity via ping with MTU size you plan to configure on the interfaces
 
 5. DEMO
   - BOM
