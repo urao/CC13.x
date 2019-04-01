@@ -74,9 +74,7 @@ You can request for Contrail Cloud activation keys by sending an
 e-mail to contrail_cloud_subscriptions@juniper.net
 ```
 
-8. How to calculate CEPH pg_num
----------------------------------------------------------------------
-[PG CALCULATION](https://ceph.com/pgcalc/)
+8. Calculate [CEPH PG](https://ceph.com/pgcalc/)
 
 
 9. Add new compute nodes 
