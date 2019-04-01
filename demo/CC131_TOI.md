@@ -98,10 +98,8 @@ Update compute-nodes.yml with new nodes && run /var/lib/contrail_cloud/scripts/c
 Run /var/lib/contrail_cloud/scripts/openstack-deploy.sh
 ```
 
-3. FAQ
-```
-[FAQ](https://github.com/urao/CC13.x/blob/master/FAQ.md)
-```
+3. Check [FAQ Link](https://github.com/urao/CC13.x/blob/master/FAQ.md)
+
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
