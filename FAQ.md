@@ -48,7 +48,7 @@ Re-run the deployment scripts from the jumphost
 /var/lib/contrail_cloud/scripts/openstack-deploy.sh 
 ```
 
-4. Steps to upgrade CC to minor releases, run following on jumphost
+5. Steps to upgrade CC to minor releases, run following on jumphost
 ---------------------------------------------------------------------
 ```
 yum update -y
@@ -56,6 +56,29 @@ yum update -y
 /var/lib/contrail_cloud/scripts/install_contrail_cloud_manager.sh
 ```
 
+6. Cleanup the overcloud, step by step from jumphost
+---------------------------------------------------------------------
+```
+/var/lib/contrail_cloud/scripts/openstack-deploy.sh -c
+/var/lib/contrail_cloud/scripts/storage-nodes-assign.sh -c
+/var/lib/contrail_cloud/scripts/compute-nodes-assign.sh -c
+/var/lib/contrail_cloud/scripts/control-vms-deploy.sh -c
+/var/lib/contrail_cloud/scripts/control-hosts-deploy.sh -c
+/var/lib/contrail_cloud/scripts/inventory-assign.sh -c
+```
+
+7. How do I get license keys to test in my lab 
+---------------------------------------------------------------------
+```
+You can request for Contrail Cloud activation keys by sending an
+e-mail to contrail_cloud_subscriptions@juniper.net
+```
+
+8. How to calculate CEPH pg_num
+---------------------------------------------------------------------
+```
+[PG CALCULATION](https://ceph.com/pgcalc/)
+```
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
