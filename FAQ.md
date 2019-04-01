@@ -76,13 +76,12 @@ e-mail to contrail_cloud_subscriptions@juniper.net
 
 8. How to calculate CEPH pg_num
 ---------------------------------------------------------------------
-```
 [PG CALCULATION](https://ceph.com/pgcalc/)
-```
+
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
 
 [vBMC](https://docs.openstack.org/tripleo-docs/latest/install/environments/virtualbmc.html)
 
-[ironic state diagram](https://docs.openstack.org/ironic/pike/_images/states.svg)
+[Ironic state diagram](https://docs.openstack.org/ironic/pike/_images/states.svg)
