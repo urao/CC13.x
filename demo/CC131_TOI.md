@@ -61,11 +61,10 @@
   * 1 DPDK Compute
 ```
   - Topology
-```
-![Topology(Physical Node)](images/topo1.png)
-![Topology(Logical)](images/topo2.png)
-![Controller VM](images/topo3.png)
-```
+![Physical Node](images/topo1.png)
+![Topology](images/topo2.png)
+![Controller VM's](images/topo3.png)
+
   - Deployment steps 
 ```
 1. Download the Contrail Cloud Installer script from 
