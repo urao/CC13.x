@@ -79,6 +79,22 @@ e-mail to contrail_cloud_subscriptions@juniper.net
 [PG CALCULATION](https://ceph.com/pgcalc/)
 
 
+9. Add new compute nodes 
+---------------------------------------------------------------------
+```
+Update inventory.yml && run /var/lib/contrail_cloud/scripts/inventory-assign.sh
+Update compute-nodes.yml with new nodes && run /var/lib/contrail_cloud/scripts/compute-nodes-assign.sh
+Run /var/lib/contrail_cloud/scripts/openstack-deploy.sh
+```
+
+10. Add new storage nodes 
+---------------------------------------------------------------------
+```
+Update inventory.yml && run /var/lib/contrail_cloud/scripts/inventory-assign.sh
+Update storage-nodes.yml with new nodes && run /var/lib/contrail_cloud/scripts/storage-nodes-assign.sh
+Run /var/lib/contrail_cloud/scripts/openstack-deploy.sh
+```
+
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
 
