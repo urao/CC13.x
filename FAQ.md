@@ -93,6 +93,16 @@ Update storage-nodes.yml with new nodes && run /var/lib/contrail_cloud/scripts/s
 Run /var/lib/contrail_cloud/scripts/openstack-deploy.sh
 ```
 
+11. Scale down compute nodes 
+---------------------------------------------------------------------
+```
+Update compute-nodes.yml, under the compute which you want to remove with below line
+```
+status: "deleting"
+```
+Run /var/lib/contrail_cloud/scripts/compute-remove.sh
+```
+
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
 
