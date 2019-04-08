@@ -13,7 +13,7 @@ docker rm <container_name>
 docker rmi <image_name>
 docker stop $(docker ps -a -q)
 docker kill $(docker ps -q)
-docker rm $(docker ps -q)
+docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
 docker inspect <container_name>
 ```
