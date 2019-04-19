@@ -66,6 +66,11 @@ lvs -a -o +devices
 lvscan -v
 ```
 
+6. Check FS on OS 
+```
+cat /etc/fstab
+```
+
 ## Reference
 [lsscsi command List](http://sg.danny.cz/scsi/lsscsi.html)
 

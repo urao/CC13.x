@@ -38,6 +38,10 @@ openstack catalog list
 openstack overcloud profiles list
 openstack overcloud plan list
 openstack stack failures list --long overcloud
+openstack stack list --nested --property status=FAILED
+openstack stack resource list overcloud --filter status=FAILED
+openstack stack resource list overcloud | grep -v COMPLETE
+openstack stack resource show overcloud [FAILED RESOURCE]
 openstack server list
 openstack network list
 openstack flavor list

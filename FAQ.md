@@ -11,6 +11,10 @@ tcpdump -i br-provision -v -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
 ```
 tcpdump -i br-ctlplane -vvv -s 1500 '((port 67 or port 68) and (udp[8:1] = 0x1))'
 ```
+  - Check logs on the undercloud VM
+```
+sudo journalctl -u openstack-ironic-inspector-dnsmasq
+```
 
 2. Steps to recover a node from clean_failed state
 --------------------------------------------------
@@ -102,6 +106,36 @@ status: "deleting"
 ```
 Run /var/lib/contrail_cloud/scripts/compute-remove.sh
 ```
+12. Debugging Mistral 
+---------------------------------------------------------------------
+- Run below commands on undercloud VM
+```
+source ~/stackrc
+openstack workflow execution list | grep "ERROR" << Get UUID of the FAILED workflow execution
+openstack workflow execution show <UUID>         << Failed Task
+openstack workflow execution output show <UUID>
+openstack workflow definition show <Task_Name>   << Provides full workflow definition
+tailf /var/log/mistral/executor.log              << Log file
+```
+13. Accessing deployment command history
+---------------------------------------------------------------------
+Check file on undercloud VM
+```
+cat /home/stack/.tripleo/history
+```
+14. Accessing logs for Baremetal node provisioning
+---------------------------------------------------------------------
+Check logs on undercloud VM
+```
+sudo journalctl -u openstack-ironic-conductor -u openstack-ironic-api
+```
+
+15. Check CEPH deployment logs
+---------------------------------------------------------------------
+Check file on undercloud VM
+```
+tailf /var/log/mistral/ceph-install-workflow.log
+```
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
@@ -109,3 +143,5 @@ Run /var/lib/contrail_cloud/scripts/compute-remove.sh
 [vBMC](https://docs.openstack.org/tripleo-docs/latest/install/environments/virtualbmc.html)
 
 [Ironic state diagram](https://docs.openstack.org/ironic/pike/_images/states.svg)
+
+[Troubleshooting](https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/13/html/director_installation_and_usage/chap-troubleshooting_director_issues)
