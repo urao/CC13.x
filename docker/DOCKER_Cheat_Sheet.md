@@ -5,7 +5,8 @@
 ```
 docker ps
 docker image ls
-docker pull
+docker pull <image_name>
+docker exec -it <docker_name> bash
 docker ps --filter name=haproxy
 docker logs --follow <container_name>
 docker volume ls
