@@ -42,9 +42,12 @@ openstack stack list --nested --property status=FAILED
 openstack stack resource list overcloud --filter status=FAILED
 openstack stack resource list overcloud | grep -v COMPLETE
 openstack stack resource show overcloud [FAILED RESOURCE]
+openstack stack event list overcloud --nested-depth 5 --follow
+openstack stack output show overcloud HostsEntry -f value -c output_value
 openstack server list
 openstack network list
 openstack flavor list
+nova list
 ```
 
 5. Cleanup the overcloud, step by step from jumphost

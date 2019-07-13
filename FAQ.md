@@ -137,6 +137,15 @@ Check file on undercloud VM
 tailf /var/log/mistral/ceph-install-workflow.log
 ```
 
+16. Reboot undercloud VM
+---------------------------------------------------------------------
+Check if autostart is enabled for the undercloud, if not enable it 
+```
+As contrail user on jumphost, `ssh undercloud sudo shutdown -h`
+sudo virsh destroy undercloud
+sudo shutdown -r 0
+```
+
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
 

@@ -4,8 +4,11 @@
 1. Below are some of the docker useful commands 
 ```
 docker ps
+docker ps -l
+docker ps -a
 docker image ls
 docker pull <image_name>
+docker exec -it -u root <docker_name> bash
 docker exec -it <docker_name> bash
 docker ps --filter name=haproxy
 docker logs --follow <container_name>
