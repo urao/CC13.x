@@ -29,6 +29,7 @@ docker run -d --rm -p 5080:80 -v $PWD:/usr/share/nginx/html:ro --name nginx1 ngi
 docker run --rm -d --name <container_name> nginx:latest
 docker stats --no-stream <container_name>
 docker port <container_name>
+docker run --rm -it -v $PWD:/scripts <container_image_name> python script.py
 ```
 
 2. Contrail logs
