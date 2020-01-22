@@ -20,6 +20,15 @@ docker kill $(docker ps -q)
 docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
 docker inspect <container_name>
+docker container ls
+docker container ls -a
+docker container stop <container_name>
+docker start -i <last_ran_container>
+docker run -it --rm <container_image_name>
+docker run -d --rm -p 5080:80 -v $PWD:/usr/share/nginx/html:ro --name nginx1 nginx:latest
+docker run --rm -d --name <container_name> nginx:latest
+docker stats --no-stream <container_name>
+docker port <container_name>
 ```
 
 2. Contrail logs
