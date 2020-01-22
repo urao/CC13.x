@@ -30,6 +30,11 @@ docker run --rm -d --name <container_name> nginx:latest
 docker stats --no-stream <container_name>
 docker port <container_name>
 docker run --rm -it -v $PWD:/scripts <container_image_name> python script.py
+docker network list
+docker network create <new-network-name>
+docker network connect <new_network_name> <container_name>
+docker container inspect <container_name> 
+docker network inspect <network_name> 
 ```
 
 2. Contrail logs
