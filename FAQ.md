@@ -146,6 +146,38 @@ sudo virsh destroy undercloud
 sudo shutdown -r 0
 ```
 
+17. Restart ironic services
+---------------------------------------------------------------------
+```
+sudo systemctl restart ironic-neutron-agent.service
+sudo systemctl restart openstack-ironic-conductor.service
+sudo systemctl restart openstack-ironic-inspector-dnsmasq.service
+sudo systemctl restart openstack-ironic-inspector.service
+```
+
+18. Set password for overcloud image for debugging purpose
+---------------------------------------------------------------------
+```
+virt-customize -a images/overcloud-full.qcow2 --root-password password:pass0123
+```
+
+19. Move node from clean_failed to clean abort state
+---------------------------------------------------------------------
+```
+openstack baremetal node list
+ironic --ironic-api-version 1.16 node-set-provision-state UUID abort
+```
+
+20. Move node from clean_failed to manageable state
+---------------------------------------------------------------------
+```
+openstack baremetal node list
+ironic node-set-maintenance UUID on
+ironic --ironic-api-version 1.16 node-set-provision-state UUID abort
+ironic node-set-maintenance UUID off
+ironic node-set-provision-state UUID manage
+```
+
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
 

@@ -3,8 +3,11 @@
 
 1. Create project under a domain and assign role
 ```
+openstack domain list
 openstack project create --domain domain1 --description "LDAP testing project" LDAP_TEST
+openstack user list --domain domain1
 openstack role add --project LDAP_TEST --user contrail01 --user-domain domain1 admin
+openstack role add --project LDAP_TEST --user contrail01 --user-domain domain1 _member_
 ```
 2. Create keystone v3 token with domain-id 
 ```
