@@ -8,11 +8,11 @@
 ### CC Controllers Topology 
 * * *
 
-![Controller Topology](images/cc_controllers.png)
+![Controller Topology](demo/images/cc_controllers.png)
 
 ### CC Compute and Storage Topology 
 
-![Compute and Storage Topology](images/cc_compute_storage.png)
+![Compute and Storage Topology](demo/images/cc_compute_storage.png)
 
 
 ### CC Features 
