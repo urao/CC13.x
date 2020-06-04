@@ -14,34 +14,30 @@ ipmi_hardware1: &hardware1
   pm_type: "ipmi"
   pm_user: "{{ vault['inventory_nodes']['hardware1']['pm_user'] }}"
   pm_password: "{{ vault['inventory_nodes']['hardware1']['pm_password'] }}"
+  capabilities: "boot_mode:uefi"
 
 # List of baremetal server nodes that can be used for the deploying roles
 # Each list item contains:
-#    name: logical name to assign this resource
-#    pm_addr: IP address for resourceIPMI interface
-#    pm_type: Ironic driver to interface with this resource (typically ipmi)
-#    pm_user: IPMI user account
-#    pm_password: IPMI account user password
+#    name: logical name to assign this resource (string)
+#    pm_addr: IP address for resourceIPMI interface (string)
+#    pm_type: Ironic driver to interface with this resource (typically ipmi) (string)
+#    pm_user: IPMI user account (string)
+#    pm_password: IPMI account user password (string)
 #    capabilities: String of comma separated list of node capabilities.
 #                  Capabilities 'profile' and 'boot_option' are managed
-#                  by Contrail Cloud and will be omitted.
+#                  by Contrail Cloud and will be omitted. (string)
+#                  e.g capabilities: "boot_mode:uefi" set boot mode to uefi
 # 
 # Some values common for nodes can be moved to dedicated section like ipmi_hardware1
 # and be referred like this:
 #    <<: *hardware1
 inventory_nodes:
-  - name: "control-host001"
-    pm_addr: "10.84.29.56"
-    <<: *hardware1
-  - name: "control-host002"
-    pm_addr: "10.84.29.57"
-    <<: *hardware1
-  - name: "control-host003"
+  - name: "control-host1"
     pm_addr: "10.84.29.52"
     <<: *hardware1
-  - name: "computedpdk1"
-    pm_addr: "10.84.29.51"
-    <<: *hardware1
   - name: "compute1"
-    pm_addr: "10.84.29.50"
+    pm_addr: "10.84.29.56"
+    <<: *hardware1
+  - name: "compute2"
+    pm_addr: "10.84.29.57"
     <<: *hardware1

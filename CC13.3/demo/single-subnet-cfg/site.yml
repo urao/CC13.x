@@ -1,320 +1,350 @@
+# Copyright 2018 Juniper Networks, Inc. All rights reserved.
+# Licensed under the Juniper Networks Script Software License (the "License").
+# You may not use this script file except in compliance with the License, which is located at
+# http://www.juniper.net/support/legal/scriptlicense/
+# Unless required by applicable law or otherwise agreed to in writing by the parties,
+# software distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#
+#
+#
+
 global:
-  # List of DNS nameservers 
+  # List of DNS nameservers
   dns:
+    # Google Public DNS
     - "8.8.8.8"
-  # List of NTP time servers 
+    - "8.8.4.4"
+  # List of NTP time servers
   ntp:
-    - "66.129.23.81"
+    # public pool.ntp.org
+    - "66.19.23.81"
   # Timezone for all servers
   timezone: 'America/Los_Angeles'
   rhel:
     # Contrail Cloud Activation Key
+    # These details are provided when you request an activation key from
+    # contrail cloud subscriptions <contrail_cloud_subscriptions@juniper.net>
+    #
     satellite:
       #SATELLITE_KEY should be defined in vault-data.yml file
-      #key: "XXXXXXXX"
       #SATELLITE_ORG
       organization: "ContrailCloudNFR"
       #SATELLITE_FQDN
       fqdn: contrail-cloud-satellite.juniper.net
-  # DNS domain information. 
-  # Must be unique for every deployment to avoid name conflicts
-  domain: "urao.lab.net"
+  # DNS domain information.
+  # Must be unique for every deployment to avoid name conflicts.
+  # Need not be a registered DNS domain.
+  domain: "urao.lab.juniper.net"
+
+idm:
+  enabled: false
 
 jumphost:
   network:
+    # network used for provisioning (PXE booting) servers
     provision:
       # jumphost nic to be used for provisioning (PXE booting) servers
       nic: enp3s0f1
 
-#undercloud:
-  #vm:
-    ##undercloud_vm_cpu_count
-    #cpu: 16
-    ##undercloud_vm_memory_size
-    #memory: 32
-    ##undercloud_vm_disk
-    #disk: 150
-
 control_hosts:
-  storage:
-    spinning_storage:
-      type: logical
-      disk:
-        - "/dev/sdb"
-        - "/dev/sdc"
-#        - "/dev/sdd"
-#        - "/dev/sde"
-#    ssd_storage:
-#      type: logical
-#      disk:
-#        - "/dev/sdf"
-#    default_dir_pool:
-#     type: dir
-  vm:
-    control:
-      cpu: 8
-      memory: 24
-      disk:
-        vda:
-          size: 100
-          pool: spinning_storage
-    contrail-controller:
-      cpu: 8
-      memory: 24
-      disk:
-        vda:
-          size: 100
-          pool: spinning_storage
-    contrail-analytics:
-      cpu: 8
-      memory: 24
-      disk:
-        vda:
-          size: 100
-          pool: spinning_storage
-    contrail-analytics-database:
-      cpu: 8
-      memory: 24
-      disk:
-        vda:
-          size: 100
-          pool: spinning_storage
-        #cassandra
-        vdb:
-          size: 100
-          pool: spinning_storage
-        #journaling recommends SSDs
-        vdc:
-          size: 500
-          pool: spinning_storage
-    appformix-controller:
-      cpu: 8
-      memory: 24
-      disk:
-        vda:
-          size: 100
-          pool: spinning_storage
-
   # Contains a list of label to disk mappings for roles
   disk_mapping:
     # the control host always uses the "baremetal" role
     baremetal:
-      # Mapping of labels to disk devices. The label is assigned to the disk 
-      # device so that the disk can be referenced by the alias in other 
+      # Mapping of labels to disk devices. The label is assigned to the disk
+      # device so that the disk can be referenced by the alias in other
       # configurations. for example /dev/disk/by-alias/<label>
       # Each list element contains:
       #   label: label to assign
-      #   name: disk device path
+      #   name: disk device path (e.g. /dev/sdb)
+      #   OR
+      #   hctl: alternative notation for disk paths specifying SCSI address
+      #    (Host, Channel, Target and Lun) The HCTL can be found with the
+      #    lsscsi (or lspci) command or it can be found in introspection data
+      #
       - label: spinning-0
         name: /dev/sdb
       - label: spinning-1
         name: /dev/sdc
-      #- label: spinning-2
-        #name: /dev/sdd
-      #- label: spinning-3
-        #name: /dev/sde
+      - label: spinning-2
+        name: /dev/sdd
+      - label: spinning-3
+        name: /dev/sde
       #- label: ssd-0
-        #name: /dev/sdf
+      #  hctl: "0:2:3:0"
+  storage:
+    # Define a set of disk groups that can be referenced for VM virtual disk allocations
+    # These become virsh storage pools on the control host
+    # Each pool has:
+    #   type: Either "dir" or "logical".
+    #       "dir" resides on /var/lib/libvirt/images.
+    #       "logical" is a LVM volume placed on the list of "disk".
+    #   disk: List of disk devices to use for the pool
+    # There is a built-in storage type called "default_dir_pool" which resides on /var/lib/libvirt/images.
+    hdd_storage:
+      type: logical
+      disk:
+        - "/dev/disk/by-alias/spinning-0"
+        - "/dev/disk/by-alias/spinning-1"
+        - "/dev/disk/by-alias/spinning-2"
+        - "/dev/disk/by-alias/spinning-3"
+    #ssd_storage:
+    #  type: logical
+    #  disk:
+    #    - "/dev/disk/by-alias/ssd-0"
+  vm:
+    # VM for Openstack Controller role
+    control:
+      cpu: 8
+      memory: 24
+      disk:
+        # Root disk
+        vda:
+          # Virsh storage pool (see storage above)
+          size: 100
+          pool: hdd_storage
+    # VMs for ContrailController role
+    contrail-controller:
+      cpu: 8
+      memory: 24
+      disk:
+        # Root disk
+        vda:
+          size: 100
+          # Virsh storage pool (see storage above)
+          pool: hdd_storage
+    # VM for ContrailTsn role
+    contrail-tsn:
+      cpu: 8
+      memory: 8
+      disk:
+        # Root disk
+        vda:
+          size: 75
+          # Virsh storage pool (see storage above)
+          pool: hdd_storage
+    # VM for ContrailAnalytics role
+    contrail-analytics:
+      cpu: 8
+      memory: 24
+      disk:
+        # Root disk
+        vda:
+          size: 100
+          # Virsh storage pool (see storage above)
+          pool: hdd_storage
+    # VM for ContrailAnalyticsDatabase role
+    contrail-analytics-database:
+      cpu: 8
+      memory: 24
+      disk:
+        # Root disk
+        vda:
+          size: 75
+          # Virsh storage pool (see storage above)
+          pool: hdd_storage
+        # Analytics database journal (ssd when possible)
+        vdb:
+          size: 50
+          # Virsh storage pool (see storage above)
+          pool: hdd_storage
+        # Analytics data (large capacity)
+        vdc:
+          size: 75
+          # Virsh storage pool (see storage above)
+          pool: hdd_storage
+    # VM for AppFormix controller role
+    appformix-controller:
+      cpu: 8
+      memory: 24
+      disk:
+        # Root disk
+        vda:
+          size: 75
+          # Virsh storage pool (see storage above)
+          pool: hdd_storage
 
-
+# Since its single subnet all below are commented expect root_disk
 compute_hosts:
-  dpdk:
-    enabled: true
-
-  sriov:
-    #enable sriov support
-    enabled: false
-    #enable sriov with dpdk
-    # Contrail vrouter mode:
-    #   supported values are: dpdk or anything else means kernel vRouter
-    mode: dpdk
-    #Sriov NumVFs separated by comma
-    num_vf:
-      - "enp129s0f1:8"
-    #NovaPCIPassthrough settings
-    pci_passthrough:
-      - devname: "enp129s0f1"
-        physical_network: "sriovnet1"
-
   root_disk:
+  #default root_disk_compute
   # you can define root disk for the profile,
   # if you don't do it will be used default
-    compute: |
-      name: "/dev/sda"
-    compute-dpdk: |
+    default:
       name: "/dev/sda"
   resource:
     minimal_disk:
-    # you can define local_g sizeb for the profile,
-    # if you don't do it will be used default
-      compute: 50
-      compute-dpdk: 50
+    #default min_disk_size_compute
+    # This value will be used as the local_gb size for the profile, unless overridden
+      default: 50
 
-undercloud:
-  nova:
-    # Nova flavor definitions for roles
-    flavor:
-      compute:
-        cpu: 8
-        memory: 24
-        disk: 40
-        ephemeral: 0
-      compute-dpdk:
-        cpu: 8
-        memory: 24
-        disk: 40
-        ephemeral: 0
-      ceph-storage:
-        cpu: 1
-        memory: 4
-        disk: 40
-        ephemeral: 0
+# Since its single subnet all below are commented
+#storage_hosts:
 
+# Single single subnet all below are commented
+#undercloud:
+#  nova:
+#    # Nova flavor definitions for roles
+#    flavor:
+#      CephStorage0Hw6:
+#        cpu: 1
+#        memory: 4
+#        disk: 40
+#        ephemeral: 0
+#      CephStorage1Hw7:
+#        cpu: 1
+#        memory: 4
+#        disk: 40
+#        ephemeral: 0
+#      ComputeKernel0Hw0:
+#        cpu: 8
+#        memory: 24
+#        disk: 40
+#        ephemeral: 0
+#      ComputeKernel0Hw1:
+#        cpu: 8
+#        memory: 24
+#        disk: 40
+#        ephemeral: 0
+#      ComputeKernel1Hw1:
+#        cpu: 8
+#        memory: 24
+#        disk: 40
+#        ephemeral: 0
+#      ComputeKernel1Hw0:
+#        cpu: 8
+#        memory: 24
+#        disk: 40
+#        ephemeral: 0
+#      ComputeDpdk0Hw2:
+#        cpu: 8
+#        memory: 24
+#        disk: 40
+#        ephemeral: 0
+#      ComputeDpdk1Hw3:
+#        cpu: 8
+#        memory: 24
+#        disk: 40
+#        ephemeral: 0
+#      ComputeSriov0Hw4:
+#        cpu: 8
+#        memory: 24
+#        disk: 40
+#        ephemeral: 0
+#      ComputeSriov1Hw5:
+#        cpu: 8
+#        memory: 24
+#        disk: 40
+#        ephemeral: 0
 overcloud:
-  extra_config:
-    #CephIPv6: True
-    ContrailDpdkOptions: "--vr_flow_entries=2000000 --vr_mempool_sz 131072 --dpdk_txd_sz 2048 --dpdk_rxd_sz 2048"
-    NovaSchedulerDefaultFilters:
-      - RetryFilter
-      - AvailabilityZoneFilter
-      - RamFilter
-      - DiskFilter
-      - ComputeFilter
-      - ComputeCapabilitiesFilter
-      - ImagePropertiesFilter
-      - ServerGroupAntiAffinityFilter
-      - ServerGroupAffinityFilter
-      - AggregateInstanceExtraSpecsFilter
-      - NUMATopologyFilter
-  contrail:
-    aaa_mode: "rbac"
-    vrouter:
-      #VrouterGateway
-      gateway: 172.16.82.254
-      dpdk:
-        #ContrailDpdkDriver
-        driver: uio_pci_generic
-        huge_pages:
-          two_mb: 128
-          one_gb: 100
-
-  # Contains a list of label to disk mappings for roles
+  # Contains a list of label to disk mappings for roles.
+  # When Ceph Storage is disabled, compute-related roles (Compute* and
+  # ComputeDpdk* roles) will use any disks labeled with
+  # "ephemeral-<digits>" for local Nova ephemeral storage.
   disk_mapping:
-    compute:
-      # Mapping of labels to disk devices. The label is assigned to the disk 
-      # device so that the disk can be referenced by the alias in other 
+    ComputeKernel:
+      # Mapping of labels to disk devices. The label is assigned to the disk
+      # device so that the disk can be referenced by the alias in other
       # configurations. for example /dev/disk/by-alias/<label>
       # Each list element contains:
       #   label: label to assign
-      #   hctl: disk device path H:C:T:L. see lsscsi
+      #   hctl: disk device path H:C:T:L (the path must exist). see lsscsi
       - label: ephemeral-0
-        hctl: '5:0:0:0'
-      - label: ephemeral-1
-        hctl: '6:0:0:0'
-      - label: ephemeral-2
-        hctl: '7:0:0:0'
-      - label: ephemeral-3
-        hctl: '8:0:0:0'
-    compute-dpdk:
-      # Mapping of labels to disk devices. The label is assigned to the disk 
-      # device so that the disk can be referenced by the alias in other 
-      # configurations. for example /dev/disk/by-alias/<label>
-      # Each list element contains:
-      #   label: label to assign
-      #   hctl: disk device path H:C:T:L. see lsscsi
-      - label: ephemeral-0
-        hctl: '5:0:0:0'
-      - label: ephemeral-1
-        hctl: '6:0:0:0'
-      - label: ephemeral-2
-        hctl: '7:0:0:0'
-      - label: ephemeral-3
-        hctl: '8:0:0:0'
-    compute-sriov:
-      # Mapping of labels to disk devices. The label is assigned to the disk 
-      # device so that the disk can be referenced by the alias in other 
-      # configurations. for example /dev/disk/by-alias/<label>
-      # Each list element contains:
-      #   label: label to assign
-      #   hctl: disk device path H:C:T:L. see lsscsi
-      - label: ephemeral-0
-        hctl: '5:0:0:0'
-      - label: ephemeral-1
-        hctl: '6:0:0:0'
-      - label: ephemeral-2
-        hctl: '7:0:0:0'
-      - label: ephemeral-3
-        hctl: '8:0:0:0'
-    ceph-storage:
-      # Mapping of labels to disk devices. The label is assigned to the disk 
-      # device so that the disk can be referenced by the alias in other 
-      # configurations. for example /dev/disk/by-alias/<label>
-      # Each list element contains:
-      #   label: label to assign
-      #   hctl: disk device path H:C:T:L. see lsscsi
-      - label: osd-0
         hctl: '0:2:1:0'
-      - label: osd-1
-        hctl: '0:2:2:0'
-      - label: osd-2
-        hctl: '0:2:3:0'
-      - label: journal-0
-        hctl: '0:2:2:0'
+      - label: ephemeral-1
+        hctl: '0:2:4:0'
+    ComputeDpdk:
+      # Mapping of labels to disk devices. The label is assigned to the disk
+      # device so that the disk can be referenced by the alias in other
+      # configurations. for example /dev/disk/by-alias/<label>
+      # Each list element contains:
+      #   label: label to assign
+      #   hctl: disk device path H:C:T:L (the path must exist). see lsscsi
+      - label: ephemeral-0
+        hctl: '5:0:0:0'
+      - label: ephemeral-1
+        hctl: '6:0:0:0'
+      - label: ephemeral-2
+        hctl: '7:0:0:0'
+      - label: ephemeral-3
+        hctl: '8:0:0:0'
+    ComputeSriov:
+      # Mapping of labels to disk devices. The label is assigned to the disk
+      # device so that the disk can be referenced by the alias in other
+      # configurations. for example /dev/disk/by-alias/<label>
+      # Each list element contains:
+      #   label: label to assign
+      #   hctl: disk device path H:C:T:L (the path must exist). see lsscsi
+      - label: ephemeral-0
+        hctl: '5:0:0:0'
+      - label: ephemeral-1
+        hctl: '6:0:0:0'
+      - label: ephemeral-2
+        hctl: '7:0:0:0'
+      - label: ephemeral-3
+        hctl: '8:0:0:0'
   network:
     # The external network is used for referencing the overcloud APIs from outside the infrastructure.
     external:
+      # Network name used by TripleO Heat Templates
       heat_name: External
+      # CIDR (IP/prefix) for the external network subnet
+      # Corresponds to the ExternalIpSubnet heat property
+      cidr: "10.187.5.0/24"
+      # Default route for the external network
+      # Corresponds to the ExternalInterfaceDefaultRoute heat property
+      gateway: "10.187.5.1"
+      # VLAN tag for the external network
+      # Corresponds to the ExternalNetworkVlanID heat property
       vlan: 200
-      mtu: 1500
-      ipv6_enable: true
-      supernet: "fd00:fd00:fd00:3000::/60"
-      cidr: "fd00:fd00:fd00:3001::/64"
-      default_route: fd00:fd00:fd00:3001::1
-      vip_enable: true
-      vip: "fd00:fd00:fd00:3001::15"
+      # Floating virtual IP for the Openstack APIs on the external network
+      # Corresponds to the PublicVirtualFixedIPs heat property
+      vip: "10.187.5.70"
+      # DHCP pool for the external network
+      # Be sure that the range is large enough to accommodate all nodes in the external network
       pool:
-        start: fd00:fd00:fd00:3001::10
-        end: fd00:fd00:fd00:3001:ffff:ffff:ffff:fffe
-      #supernet: "10.187.0.0/16"
-      #cidr: "10.187.5.0/24"
-      #default_route: "10.187.5.1"
-      #vip_enable: true
-      #vip: "10.187.5.70"
-      #pool:
-        #start: "10.187.5.51"
-        #end: "10.187.5.69"
+        # Range start for the DHCP pool
+        start: "10.187.5.51"
+        # Range end for the DHCP pool
+        end: "10.187.5.70"
+      # MTU for external network
+      # Corresponds to the ExternalNetworkMtu heat property
+      mtu: 1500
       # List of roles that can be on this network
       role:
         - Controller
-        #- CephStorage
-
+        - AppformixController
+    # The internal API network is used for control plane signalling and service API calls
     internal_api:
       # Network name used by TripleO Heat Templates
       heat_name: InternalApi
+      # VLAN tag for the internal API network
+      # Corresponds to the InternalApiNetworkVlanID heat property
       vlan: 201
+      # CIDR (IP/prefix) for the internal api supernet network subnet
+      # Corresponds to the InternalApiSupernet heat property
+      # Supernet is used in spine/leaf configuration
       # Supernet accommodate all related leaf networks, e.g. internal_api0 and internal_api1
       # Supernet is used to create static routes between leafs
       # Supernet is defined only for main network, not per leafs
-      supernet: "172.16.0.0/16"
+      #supernet: "172.16.0.0/16"
       # CIDR (IP/prefix) for the internal api network subnet
       # Corresponds to the InternalApiIpSubnet heat property
       cidr: "172.16.0.0/24"
       # Default route for the internal api network
       # Corresponds to the InternalApiInterfaceDefaultRoute heat property
-      #default_route: 172.16.0.1
+      gateway: 172.16.0.1
       # MTU for internal api network
       # Corresponds to the InternalApiNetworkMtu heat property
       mtu: 1500
       # DHCP pool for the internal api network
-      # Be sure that the range is large enough to accomodate all nodes in the internal api network
+      # Be sure that the range is large enough to accommodate all nodes in the internal api network
       pool:
         # Range start for the DHCP pool
         start: 172.16.0.100
         # Range end for the DHCP pool
         end: 172.16.0.160
-      # Enable creation of a virtual IP on this network
-      # Management and Tenant networks don't use VIPs
-      vip_enable: true
       # Floating virtual IP for the Openstack APIs on the internal api network
       # Corresponds to the InternalApiVirtualFixedIPs heat property
       vip: 172.16.0.90
@@ -324,10 +354,10 @@ overcloud:
         - ContrailController
         - ContrailAnalytics
         - ContrailAnalyticsDatabase
-        - ContrailDpdk
-        - Compute
-        #- CephStorage
-
+        - AppformixController
+        - ComputeKernel
+    # The management network is defined for backwards-compatibility in RHOSP and is not
+    # used by default by any roles.
     management:
       # Network name used by TripleO Heat Templates
       heat_name: Management
@@ -340,75 +370,88 @@ overcloud:
       # MTU for the network
       # Corresponds to the ManagementNetworkMtu heat property
       mtu: 1500
-      vip_enable: false
       # DHCP pool for the  network
-      # Be sure that the range is large enough to accomodate all nodes in the network
+      # Be sure that the range is large enough to accommodate all nodes in the network
       pool:
         # Range start for the DHCP pool
         start: 192.168.1.100
         # Range end for the DHCP pool
         end: 192.168.1.200
-
+    # The storage network is used for Compute storage access
     storage:
+      # Network name used by TripleO Heat Templates
       heat_name: Storage
+      # VLAN tag for the storage network
+      # Corresponds to the StorageNetworkVlanID heat property
       vlan: 203
+      supernet: "172.19.0.0/16"
+      cidr: "172.19.0.0/24"
+      gateway: 172.19.0.1
       mtu: 1500
-      vip_enable: true
-      #ipv6_enable: true
-      #supernet: "2aaa::/60"
-      #cidr: "2aaa::/64"
-      #default_route: fd00:fd00:fd00:3001::1
-      #pool:
-        #start: 2aaa::1
-        #end: 2aaa:0000:0000:0000:ffff:ffff:ffff:fffe
-      role:
-        - Controller
-        - ContrailDpdk
-        - Compute
-        #- CephStorage
-
+      pool:
+        start: 172.19.0.100
+        end: 172.19.0.200
+      # List of roles that can be on this network
+      #role:
+        #- Controller
+        #- ContrailTsn
+    # The storage management network is used for storage operations such as replication
     storage_mgmt:
+      # Network name used by TripleO Heat Templates
       heat_name: StorageMgmt
+      # VLAN tag for the storage management network
+      # Corresponds to the StorageMgmtNetworkVlanID heat property
       vlan: 204
+      supernet: "172.20.0.0/16"
+      cidr: "172.20.0.0/24"
+      gateway: 172.20.0.1
       mtu: 1500
-      #ipv6_enable: true
-      #supernet: "3aaa::/60"
-      #cidr: "3aaa::/64"
-      #default_route: fd00:fd00:fd00:3001::1
-      #vip_enable: true
-      #pool:
-        #start: 3aaa::1
-        #end: 3aaa:0000:0000:0000:ffff:ffff:ffff:fffe
-      role:
-        - Controller
-        #- CephStorage
-
+      pool:
+        start: 172.20.0.100
+        end: 172.20.0.200
+      # List of roles that can be on this network
+      #role:
+        #- Controller
+    # The tenant network is used for tenant workload data
     tenant:
+      # Network name used by TripleO Heat Templates
       heat_name: Tenant
       # VLAN tag for the tenant network
       # Corresponds to the TenantNetworkVlanID heat property
       vlan: 202
-      #TenantNetCidr
-      supernet: "172.16.0.0/16"
+      #supernet: "172.18.0.0/16"
       cidr: "172.16.82.0/24"
-      default_route: 172.16.82.254
+      gateway: 172.16.82.254
       vrouter_gateway: 172.16.82.254
-      #TenantNetworkMtu
       mtu: 1500
       pool:
-        #TenantAllocationPoolsStart
         start: 172.16.82.100
-        #TenantAllocationPoolsEnd
         end: 172.16.82.200
       # List of roles that can be on this network
       role:
         - ContrailController
         - ContrailAnalytics
         - ContrailAnalyticsDatabase
-        - ContrailDpdk
-        - Compute
+        - ComputeKernel
+  # Contrail sepcific settings
+  #contrail:
+  #  aaa_mode: cloud-admin
+  #  vrouter:
+  #    contrail_settings:
+  #      # Settings per profile.
+  #      # Profile's contrail_settings replace default settings and should include
+  #      # all keys and values which are intended to be exported on given role.
+  #      # When leafs are used it implies per profile configuration as it defines
+  #      # VROUTER_GATEWAY for profile by quering node's tenant network for
+  #      # vrouter_gateway value.
+  #      default:
+  #        VROUTER_GATEWAY: 172.16.81.254
+  #        BGP_ASN: 64512
+  #        LACP_RATE: 1
+  #      ComputeKernel1Hw0:
+  #        LACP_RATE: 1
 
-  # Information used to generate the SSL certificates for the Openstack service APIs
+  # Information used to generate the SSL certificates for the public Openstack service APIs
   tls:
     #countryName_default
     country: "US"
@@ -418,36 +461,119 @@ overcloud:
     city: "Sunnyvale"
     #organizationalUnitName_default
     organization: "JNPR"
-    #commonName_default
-    #common_name: "10.187.5.70"
-    common_name: "fd00:fd00:fd00:3001::15"
+    #commonName_default - this is typically the external VIP
+    common_name: "10.187.5.70"
 
 ceph:
-  # Choice to enable Ceph storage in the overcloud.  
-  # "true" means that Ceph will be deployed as the backed for Cinder and Glance services.  
+  # Choice to enable Ceph storage in the overcloud.
+  # "true" means that Ceph will be deployed as the backed for Cinder and Glance services.
   # "false" false means that Ceph will not be deployed.
   enabled: false
   # Ceph OSD disk configuration
   osd:
     # Update the Ceph crush map when OSDs are started
     crush_update_on_start: true
-    # Size for OSD journal files.
-    journal_size: 2048
     # Ceph OSD disk assignments. The named disks will be exclusively used by Ceph for persistence.
-    # For each disk, a "journal" can be configured.  journals can be shared between OSDs.
-    #    journal: '/dev/disk/by-alias/journal-0'
-    dmcrypt: true
-    disk:
-      '/dev/sdb':
-      '/dev/sdc':
-      #'/dev/sdd':
-      #'/dev/sde':
-      #'osd-0':
+    # Lvm is a default scenario for ceph deployment with bluestore as a backend.
+    # When all named disks are the same type, spinning or solid state, all of them will be used
+    # as ceph osds. When disks with mixed types are defined spinning disks will be used as osds
+    # and on solid state disks ceph db will be created. For mixed types of disks the automatic pgp
+    # number calculation requires assigning key 'contents' with value 'db' to ssd disks.
+    # In below example disks sd[b-e] are spinning disks and sdf is solid state disk.
+    default:
+      disk:
+        '/dev/sdb':
+        '/dev/sdc':
+        '/dev/sdd':
+        '/dev/sde':
+        '/dev/sdf':
+          contents: db
+    CephStorage0Hw6:
+      disk:
+        '/dev/sdb':
+        '/dev/sdc':
+        '/dev/sdd':
+        '/dev/sde':
+        '/dev/sdf':
+          contents: db
+    CephStorage1Hw7:
+      disk:
+        '/dev/sdb':
+        '/dev/sdc':
+        '/dev/sdd':
+        '/dev/sde':
+        '/dev/sdf':
+          contents: db
+  # By default, pgp number is calculated by contrail cloud. If you want, you can give this parameter
+  # by yourself. Use the calculator on the website: https://ceph.com/pgcalc/. Calculator takes into
+  # account also pool utilization. Calculated pgp_num can be introduced in configuration as below.
+  # It's defined per used pool.
+  #  pool:
+  #    vms:
+  #      pgp_num: 32
+  #    rbd:
+  #      pgp_num: 32
+  #    images:
+  #      pgp_num: 32
+  #    volumes:
+  #      pgp_num: 32
+  #    backups:
+  #      pgp_num: 32
+  #
+  # Rados Gateway when enabled, which is a default behaviour, creates it's own ceph pools
+  # not tracked by contrail cloud. Those pools can be predefined to better control
+  # their sizes. Below pools definitions are not an exhaustive, please consult with
+  # https://ceph.com/pgcalc/
+  # Pools should have enabled application according to their use.
+  # If not changed explicit, pools are created with 'rbd' application assigned.
+  # Available options are:
+  #   - rbd for the Ceph Block Device
+  #   - rgw for the Ceph Object Gateway
+  #   - cephfs for the Ceph Filesystem
+  # or user defined value for custom application.
+  # More details can be found on
+  # https://access.redhat.com/documentation/en-us/red_hat_ceph_storage/3/html/storage_strategies_guide/pools-1#enable-application
+  #    .rgw.root:
+  #      pgp_num: 16
+  #      enabled: true
+  #      replica: 3
+  #      application: rgw
+  #    default.rgw.control:
+  #      pgp_num: 16
+  #      enabled: true
+  #      replica: 3
+  #      application: rgw
+  #    default.rgw.meta:
+  #      pgp_num: 16
+  #      enabled: true
+  #      replica: 3
+  #      application: rgw
+  #    default.rgw.log:
+  #      pgp_num: 16
+  #      enabled: true
+  #      replica: 3
+  #      application: rgw
+  #    default.rgw.buckets.index:
+  #      pgp_num: 16
+  #      enabled: true
+  #      replica: 3
+  #      application: rgw
+  #    default.rgw.buckets.data:
+  #      pgp_num: 16
+  #      enabled: true
+  #      replica: 3
+  #      application: rgw
+  #    default.rgw.buckets.non-ec:
+  #      pgp_num: 16
+  #      enabled: true
+  #      replica: 3
+  #      application: rgw
 
-#appformix:
-  # Floating virtual IP for the Appformix APIs on the external network
-  # Only set this when you have multiple control hosts which allows Apformix to run in HA mode
-  #vip: "10.87.4.187"
-  #secondary_vip: "172.16.0.89"
-  #keepalived:
-  #  secondary_vrrp_interface: "vlan226"
+appformix:
+  # Set to true if you have multiple control hosts which allows Apformix to run in HA mode
+  enable_ha: false
+  # Floating virtual IP for the Appformix APIs on the external network, used and required by HA mode.
+  vip: "10.10.10.101"
+  keepalived:
+    # Set which interface will be used for vrrp
+    vrrp_interface: "eth1"

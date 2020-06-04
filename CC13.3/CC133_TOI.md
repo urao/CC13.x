@@ -1,11 +1,11 @@
-## CC 13.1 DEMO TOI
+## CC 13.3 DEMO TOI
 
 1. Introduction
 ```
 * Juniper Networks Contrail Cloud is an integrated Telco Cloud platform built to run 
   high-performance NFV with always-on reliability, allowing service providers to deliver 
   innovative services with greater agility. 
-* Contrail Cloud Release 13.1 features Red Hat OpenStack combined with Juniper Contrail 
+* Contrail Cloud Release 13.3 features Red Hat OpenStack combined with Juniper Contrail 
   Networking, thereby bridging dynamic cloud orchestration with highly scalable connectivity. 
 * Contrail Cloud leverages AppFormix which has a built-in automation capability powered by 
   machine learning to run the cloud infrastructure and VNFs in the most optimal manner, and 
@@ -14,15 +14,12 @@
 
 2. Supported Features 
 ```
-1. IPv6 addressing support on External, Storage and Storage Mgmt networks
-2. LDAP backend integration with keystone
-3. Disk labeling
-4. Multi-tenant subnet
-5. Multiple role profiles 
-6. Internet Proxy
-7. Control VM's placement
-8. Credentials are stored in ansible-vault, which is encrypted
-9. External CEPH (Make sure version of CEPH is compatible with OSP13)
+1. Host Aggregates
+2. IdM/FreeIPA support
+3. Ceph 3.3
+4. In-place update/upgrade
+5. ccloud CLI extension
+6. Bug fixes 
 ```
 
 3. Deployment prerequisties
@@ -57,7 +54,7 @@
 * 3 Servers
   * 1 Jumphost
   * 1 Control Host
-  * 1 DPDK Compute
+  * 2 Kernel Compute
 ```
   - Topology
 ![Physical Node](images/topo1.png)
@@ -73,7 +70,7 @@
        --satellite_key ${SATELLITE_KEY} --satellite_org ${SATELLITE_ORG}
 3. cp /var/lib/contrail_cloud/samples/*.yml /var/lib/contrail_cloud/config 
 ```
-4. Check the sample working [config files](https://github.com/urao/CC13.x/tree/master/demo/single-subnet-cfg)
+4. Check the sample working [config files](https://github.com/urao/CC13.x/CC13.3/tree/master/demo/single-subnet-cfg)
 ```
 5. Configure passwords in vault-data.yml
 6. sudo /var/lib/contrail_cloud/scripts/install_contrail_cloud_manager.sh
@@ -83,7 +80,9 @@
 10. /var/lib/contrail_cloud/scripts/compute-nodes-assign.sh
 11. /var/lib/contrail_cloud/scripts/storage-nodes-assign.sh
 12. /var/lib/contrail_cloud/scripts/openstack-deploy.sh
+12. /var/lib/contrail_cloud/scripts/openstack-post-deploy.sh
 13. /var/lib/contrail_cloud/scripts/appformix-deploy.sh
+14. /var/lib/contrail_cloud/scripts/install_contrail_command.sh
 ```
   - Validate Deployment
 ```

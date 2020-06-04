@@ -177,6 +177,15 @@ ironic --ironic-api-version 1.16 node-set-provision-state UUID abort
 ironic node-set-maintenance UUID off
 ironic node-set-provision-state UUID manage
 ```
+21. ccloud CLI extension 
+---------------------------------------------------------------------
+```
+ssh undercloud
+source stackrc
+openstack ccloud nodemap hosts
+openstack ccloud nodemap list
+openstack ccloud nodemap show <host_name>
+```
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
