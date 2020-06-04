@@ -1,0 +1,88 @@
+# Copyright 2018 Juniper Networks, Inc. All rights reserved.
+# Licensed under the Juniper Networks Script Software License (the "License").
+# You may not use this script file except in compliance with the License, which is located at
+# http://www.juniper.net/support/legal/scriptlicense/
+# Unless required by applicable law or otherwise agreed to in writing by the parties,
+# software distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#
+#
+#
+
+# List of nodes to use as appformix server role
+# Each list item contains:
+#    name: name of a node in the inventory
+#    hostname: hostname to assign the node after it is imaged
+#    ip_address: address on Control Plane network
+#    other optional ad hoc variables: these variables can be refered with "{{ host.<variable> }}"
+#        external_ip_netmask:  address on an infrastructure network
+#        external_ip_gateway:  gateway on an infrastructure network
+#        internal_api_ip_netmask:  address on internal_api network
+appformix_nodes:
+  - name: appformix-controller-192_168_213_5
+    hostname: "afx0"
+    control_ip_netmask: "192.168.213.10/24"
+    external_ip_netmask: "10.187.5.131/25"
+    external_ip_gateway: "10.187.5.1"
+    internal_api_ip_netmask: "172.16.0.190/24"
+    dns_server1: "172.29.143.60"
+    dns_server2: "172.29.139.60"
+  - name: appformix-controller-192_168_213_6
+    hostname: "afx1"
+    control_ip_netmask: "192.168.213.11/24"
+    external_ip_netmask: "10.10.10.132/25"
+    external_ip_gateway: "10.10.10.254"
+    internal_api_ip_netmask: "172.16.0.191/24"
+    dns_server1: "172.29.143.60"
+    dns_server2: "172.29.139.60"
+  - name: appformix-controller-192_168_213_7
+    hostname: "afx2"
+    control_ip_netmask: "192.168.213.12/24"
+    external_ip_netmask: "10.10.10.133/25"
+    external_ip_gateway: "10.10.10.254"
+    internal_api_ip_netmask: "172.16.0.192/24"
+    dns_server1: "172.29.143.60"
+    dns_server2: "172.29.139.60"
+
+# Template for network layout on all appformix server nodes
+# This follows the os-net-config syntax
+# See https://github.com/openstack/os-net-config/tree/stable/queens
+appformix_nodes_network_config:
+  - type: interface
+    name: eth0
+    use_dhcp: false
+    addresses:
+    -
+      ip_netmask: "{{ host.control_ip_netmask }}"
+    mtu: "{{ overcloud['network']['control']['mtu'] }}"
+    dns_servers:
+      - "{{ host.dns_server1 }}"
+      - "{{ host.dns_server2 }}"
+  - type: interface
+    name: eth1
+    use_dhcp: false
+  - type: vlan
+    device: eth1
+    use_dhcp: false
+    vlan_id: "{{ overcloud['network']['internal_api']['vlan'] }}"
+    mtu: "{{ overcloud['network']['internal_api']['mtu'] }}"
+    addresses:
+    -
+      ip_netmask: "{{ host.internal_api_ip_netmask }}"
+  - type: vlan
+    device: eth1
+    use_dhcp: false
+    vlan_id: "{{ overcloud['network']['external']['vlan'] }}"
+    mtu: "{{ overcloud['network']['external']['mtu'] }}"
+    addresses:
+    -
+      ip_netmask: "{{ host.external_ip_netmask }}"
+    routes:
+      -
+        ip_netmask: "{{ host.external_ip_netmask }}"
+        next_hop: "{{ host.external_ip_gateway }}"
+        default: true
+  - type: interface
+    name: eth2
+    use_dhcp: false
+    mtu: 1500

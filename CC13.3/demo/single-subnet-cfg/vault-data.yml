@@ -1,0 +1,83 @@
+# This config structure can be used to hold information that needs to be encrypted for privacy
+# If there is a password stored in /var/lib/contrail_cloud/config/.vault_password then it will be used
+# Otherwise the password can be entered interactively 
+#
+# This file can be edited with the "ansible-vault edit" command
+# This file can be re-encrypted with a new password with the "ansible-vault rekey" command
+vault:
+  global:
+    rhel:
+      # Contrail Cloud Activation Key
+      satellite:
+        #SATELLITE_KEY
+        key: "PUT_YOUR_KEY_HERE"
+    # User account used for all Contrail Cloud automation 
+    # This account will be created on:
+    #    - jumphost
+    #    - control hosts
+    #    - all overcloud roles
+    #    - appformix controllers
+    service_user:
+      # Account Name
+      name: "contrail"
+      # Account Password
+      password: "c0ntrail123"
+      # Passphrase used to encrypt ssh key of service user.
+      # If not defined ssh private key will not be encrypted.
+      # ssh_key_passphrase: "c0ntrail123"
+  undercloud:
+    vm:
+      # undercloud user name
+      user: "stack"
+      # password for the undercloud vm user
+      password: "contrail123"
+      # root password for the undercloud VM
+      root_password: "contrail123"
+      # Passphrase used to encrypt ssh key of undercloud user.
+      # If not defined ssh private key will not be encrypted.
+      # ssh_key_passphrase: "c0ntrail123"
+      vnc: 
+        # VNC console password for the undercloud VM
+        password: "contrail123"
+  overcloud:
+    # Keystone administrator password
+    admin_password: "c0ntrail123"
+    # Root password used for local log in to overcloud nodes through console
+    # root_password: "c0ntrail123"
+  control_hosts:
+    vm:
+      vnc: 
+        # VNC console password for all control VMs
+        password: "contrail123"
+  appformix:
+    mysql:
+      # Approfmix MySQL user account
+      user: "appformix"
+      # Approfmix MySQL user password
+      password: "c0ntrail123"
+    rabbitmq:
+      # Approfmix RabbitMQ user account
+      user: "appformix"
+      # Approfmix RabbitMQ user password
+      password: "c0ntrail123"
+  # List of inventory hardware types that can hold hardware-specific properties
+  # You can create similar configutations to allow reference from inventory-nodes.yml
+  inventory_nodes:
+    # VirtualBMC used to manage control VMs on control hosts
+    vbmc:
+      # VritualBMC IPMI user account for all control VMs
+      user: "ipmi"
+      # VritualBMC IPMI password for all control VMs
+      password: "ipmipassword"
+    # A sample configuration for a hardware type
+    hardware1:
+      # IPMI user account for Ironic inevntory resources
+      pm_user: "ADMIN"
+      # IPMI user password for Ironic inevntory resources
+      pm_password: "ADMIN"
+    # A sample configuration for a hardware type
+    hardware2:
+      # IPMI user account for Ironic inevntory resource
+      pm_user: "admin"
+      # IPMI user password for Ironic inevntory resource
+      pm_password: "admin"
