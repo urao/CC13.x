@@ -184,7 +184,12 @@ ssh undercloud
 source stackrc
 openstack ccloud nodemap hosts
 openstack ccloud nodemap list
-openstack ccloud nodemap show <host_name>
+openstack ccloud nodemap show <host-name>
+```
+22. Removing existing hosts from satellite
+---------------------------------------------------------------------
+```
+./satellite6hosts.py --user <key> --password <passwd> delete --host <host-fqdn-name>
 ```
 
 ## Reference

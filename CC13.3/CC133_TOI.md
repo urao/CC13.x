@@ -84,8 +84,9 @@
 13. /var/lib/contrail_cloud/scripts/appformix-deploy.sh
 14. /var/lib/contrail_cloud/scripts/install_contrail_command.sh
 ```
-  - Validate Deployment
 ```
+15. Validate Deployment
+
 /var/lib/contrail_cloud/scripts/overcloud-validation.sh
 ```
 

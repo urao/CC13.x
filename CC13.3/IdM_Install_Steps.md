@@ -1,7 +1,31 @@
-### Steps to install IdM server
--------------------------------
+### Steps to install IdM server on RH7 Enterprise Linux
+-------------------------------------------------------
 
-1. 
+1. Check firewalld service is running
+```
+systemctl status firewalld.service
+```
+
+2. Open required ports and services, run as root user
+```
+firewall-cmd --permanent --add-port={80/tcp,443/tcp,389/tcp,636/tcp,88/tcp,88/udp,464/tcp,464/udp,53/tcp,53/udp,123/udp}
+firewall-cmd --permanent --add-service={freeipa-ldap,freeipa-ldaps,dns}
+firewall-cmd --reload
+```
+
+3. Install required packages, run as root user
+```
+yum install ipa-server
+ipa-server-install  << Answer the questions to install
+kinit admin
+yum install python-novajoin
+```
+
+4. Run below command to generate OTP to be added in site.yml
+```
+novajoin-ipa-setup --principal admin --password contrail123 --server <idm-server-fqdn-name> --realm <REALM> --domain <domain-name> --hostname <undercloud-fqdn-name> --precreate --otp-file /tmp/otp_password
+copy the OTP from /tmp/otp_password and update site.yml file
+```
 
 
 ## Reference
