@@ -16,18 +16,27 @@ firewall-cmd --reload
 3. Install required packages, run as root user
 ```
 yum install ipa-server
-ipa-server-install  << Answer the questions to install
+ipa-server-install  << Answer the questions during install
 kinit admin
 yum install python-novajoin
 ```
 
-4. Run below command to generate OTP to be added in site.yml
+4. Run below command to generate OTP for the undercloud to be added in site.yml
 ```
 novajoin-ipa-setup --principal admin --password contrail123 --server <idm-server-fqdn-name> --realm <REALM> --domain <domain-name> --hostname <undercloud-fqdn-name> --precreate --otp-file /tmp/otp_password
 copy the OTP from /tmp/otp_password and update site.yml file
 ```
 
+#### Alternative option
+1. Set up container on jumphost with freeipa
+```
+https://github.com/freeipa/freeipa-container 
+Install nova-join package in container
+```
+2. Generate OTP for undercloud
+
 
 ## Reference
 
 [IDM Server](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/linux_domain_identity_authentication_and_policy_guide/install-server)
+[FreeIPA](https://github.com/freeipa/)
