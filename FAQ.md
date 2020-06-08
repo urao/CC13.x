@@ -197,6 +197,16 @@ openstack ccloud nodemap show <host-name>
 ipa user-find admin
 ipa host-find --all
 ```
+```
+global
+  dns: "192.168.213.1"
+
+idm:
+  enable: true
+  otp: "9MdXwcTuGhart5d7EL9JrGoXEijh245NvqF5wyLUrBNm"
+  #idm_server_ip - idm ip address
+  idm_server_ip: "192.168.213.2"
+```
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
