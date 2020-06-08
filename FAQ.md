@@ -191,6 +191,12 @@ openstack ccloud nodemap show <host-name>
 ```
 ./satellite6hosts.py --user <key> --password <passwd> delete --host <host-fqdn-name>
 ```
+23. Idm commands
+-----------------------------------------------------------------------
+```
+ipa user-find admin
+ipa host-find --all
+```
 
 ## Reference
 [CC13 Deployment Guide](https://www.juniper.net/documentation/en_US/contrail5.0/information-products/pathway-pages/contrail-cloud-deployment-guide-13.0.pdf)
